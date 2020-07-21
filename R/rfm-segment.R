@@ -12,7 +12,7 @@
 #' @param monetary_upper Upper boundary for monetary score.
 #'
 #' @examples
-#' analysis_date <- lubridate::as_date('2006-12-31', tz = 'UTC')
+#' analysis_date <- lubridate::as_date('2006-12-31')
 #' rfm_result <- rfm_table_order(rfm_data_orders, customer_id, order_date,
 #' revenue, analysis_date)
 #'
@@ -51,7 +51,8 @@ rfm_segment <- function(data, segment_names = NULL, recency_lower = NULL,
     rfm_score_table$segment[(
       (rfm_score_table$recency_score %>% dplyr::between(recency_lower[i], recency_upper[i])) &
         (rfm_score_table$frequency_score %>% dplyr::between(frequency_lower[i], frequency_upper[i])) &
-        (rfm_score_table$monetary_score %>% dplyr::between(monetary_lower[i], monetary_upper[i])))] <- segment_names[i]
+        (rfm_score_table$monetary_score %>% dplyr::between(monetary_lower[i], monetary_upper[i])) &
+        !rfm_score_table$segment %in% segment_names)] <- segment_names[i]
   }
 
   rfm_score_table$segment[is.na(rfm_score_table$segment)] <- "Others"
@@ -73,7 +74,7 @@ rfm_segment <- function(data, segment_names = NULL, recency_lower = NULL,
 #' @param print_plot logical; if \code{TRUE}, prints the plot else returns a plot object.
 #'
 #' @examples
-#' analysis_date <- lubridate::as_date('2006-12-31', tz = 'UTC')
+#' analysis_date <- lubridate::as_date('2006-12-31')
 #' rfm_result <- rfm_table_order(rfm_data_orders, customer_id, order_date,
 #' revenue, analysis_date)
 #'

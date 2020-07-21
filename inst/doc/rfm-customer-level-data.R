@@ -15,13 +15,13 @@ options(tibble.width = Inf)
 rfm_data_customer
 
 ## ----rfm_table_order, eval=FALSE----------------------------------------------
-#  analysis_date <- lubridate::as_date('2007-01-01', tz = 'UTC')
+#  analysis_date <- lubridate::as_date('2007-01-01')
 #  rfm_result <- rfm_table_customer(rfm_data_customer, customer_id, number_of_orders,
 #    recency_days, revenue, analysis_date)
 #  rfm_result
 
 ## ----rfm_table_order2, eval=TRUE, echo=FALSE----------------------------------
-analysis_date <- lubridate::as_date('2007-01-01', tz = 'UTC')
+analysis_date <- lubridate::as_date('2007-01-01')
 rfm_result <- rfm_table_customer(rfm_data_customer, customer_id, number_of_orders,
   recency_days, revenue, analysis_date)
 rfm_result %>%
