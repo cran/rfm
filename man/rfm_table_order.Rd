@@ -43,22 +43,30 @@ rfm_table_order(
 \item{frequency_bins}{Number of bins used for frequency score.}
 \item{recency_bins}{Number of bins used for recency score.}
 \item{monetary_bins}{Number of bins used for monetary score.}
-\item{threshold}{tibble with thresholds used for generating RFM scores.}
+\item{threshold}{thresholds used for generating RFM scores.}
 }
 \description{
 Recency, frequency, monetary and RFM score.
 }
 \examples{
-analysis_date <- lubridate::as_date('2006-12-31')
-rfm_table_order(rfm_data_orders, customer_id, order_date, revenue, analysis_date)
+analysis_date <- as.Date("2006-12-31")
+rfm_table_order(
+  rfm_data_orders, customer_id, order_date, revenue,
+  analysis_date
+)
 
 # access rfm table
-result <- rfm_table_order(rfm_data_orders, customer_id, order_date, revenue, analysis_date)
+result <- rfm_table_order(
+  rfm_data_orders, customer_id, order_date,
+  revenue, analysis_date
+)
 result$rfm
 
 # using custom threshold
-rfm_table_order(rfm_data_orders, customer_id, order_date, revenue, analysis_date,
-recency_bins = c(115, 181, 297, 482), frequency_bins = c(4, 5, 6, 8),
-monetary_bins = c(256, 382, 506, 666))
+rfm_table_order(rfm_data_orders, customer_id, order_date, revenue,
+  analysis_date,
+  recency_bins = c(115, 181, 297, 482), frequency_bins = c(4, 5, 6, 8),
+  monetary_bins = c(256, 382, 506, 666)
+)
 
 }

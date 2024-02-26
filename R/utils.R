@@ -1,24 +1,22 @@
-#' @importFrom magrittr %>% %<>%
+#' @importFrom magrittr extract add
+#' @importFrom stats median runif quantile reorder
+#' @importFrom utils available.packages menu update.packages packageVersion
+#' @importFrom utils install.packages
 bins <- function(data, value, n_bins) {
 
-  my_value   <- rlang::enquo(value)
   length_out <- n_bins + 1
 
-  data %>%
-    dplyr::pull(!! my_value) %>%
-    stats::quantile(probs = seq(0, 1, length.out = length_out)) %>%
+  data[[value]] %>%
+    quantile(probs = seq(0, 1, length.out = length_out)) %>%
     unname() %>%
-    magrittr::extract(c(-1, -length_out)) %>%
-    magrittr::add(1)
+    extract(c(-1, -length_out)) %>%
+    add(1)
 
 }
 
 bins_lower <- function(data, value, bins) {
 
-  my_value <- rlang::enquo(value)
-
-  data %>%
-    dplyr::pull(!! my_value) %>%
+  data[[value]] %>%
     min() %>%
     append(bins)
 
@@ -26,13 +24,10 @@ bins_lower <- function(data, value, bins) {
 
 bins_upper <- function(data, value, bins) {
 
-  my_value <- rlang::enquo(value)
-
   data_max <-
-    data %>%
-    dplyr::pull(!! my_value) %>%
+    data[[value]] %>%
     max() %>%
-    magrittr::add(1)
+    add(1)
 
   c(bins, data_max)
 }
@@ -40,10 +35,7 @@ bins_upper <- function(data, value, bins) {
 
 check_levels <- function(rfm_heatmap_data, column) {
 
-  my_column <- rlang::enquo(column)
-
-  rfm_heatmap_data %>%
-    dplyr::pull(!! my_column) %>%
+  rfm_heatmap_data[[column]] %>%
     as.factor() %>%
     levels() %>%
     as.vector() %>%
@@ -57,30 +49,16 @@ modify_rfm <- function(rfm_heatmap_data, n_bins, check_levels) {
   missing2          <- seq_len(n_bins)[missing]
   extra_data        <- expand.grid(missing2, seq_len(n_bins), 0)
   names(extra_data) <- names(rfm_heatmap_data)
-
-  dplyr::bind_rows(rfm_heatmap_data, extra_data)
+  rbind(rfm_heatmap_data, extra_data)
 
 }
 
-#' @importFrom utils packageVersion menu install.packages
-check_suggests <- function(pkg) {
+try_pkg <- function(pkg) {
+  tryCatch(packageVersion(pkg), error = function(e) NA)
+}
 
-  pkg_flag <- tryCatch(utils::packageVersion(pkg), error = function(e) NA)
-
-  if (is.na(pkg_flag)) {
-
-    msg <- message(paste0('\n', pkg, ' must be installed for this functionality.'))
-
-    if (interactive()) {
-      message(msg, "\nWould you like to install it?")
-      if (utils::menu(c("Yes", "No")) == 1) {
-        utils::install.packages(pkg)
-      } else {
-        stop(msg, call. = FALSE)
-      }
-    } else {
-      stop(msg, call. = FALSE)
-    }
-  }
-
+to_title_case <- function(x) {
+    s <- strsplit(x, " ")[[1]]
+    paste(toupper(substring(s, 1, 1)), substring(s, 2),
+          sep = "", collapse = " ")
 }
