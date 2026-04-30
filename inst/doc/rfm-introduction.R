@@ -19,9 +19,9 @@ head(rfm_data_orders)
 head(rfm_data_customer)
 
 ## ----rfm_table_order, eval=FALSE----------------------------------------------
-#  analysis_date <- as.Date("2006-12-31")
-#  rfm_result <- rfm_table_order(rfm_data_orders, customer_id, order_date, revenue, analysis_date)
-#  rfm_result
+# analysis_date <- as.Date("2006-12-31")
+# rfm_result <- rfm_table_order(rfm_data_orders, customer_id, order_date, revenue, analysis_date)
+# rfm_result
 
 ## ----rfm_table_order2, eval=TRUE, echo=FALSE----------------------------------
 analysis_date <- as.Date("2006-12-31")
